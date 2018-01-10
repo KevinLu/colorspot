@@ -6,13 +6,9 @@ Program name: Color Spot
  */
 
 //VARIABLES
-boolean start;
-boolean instructions;
-boolean mouseClick;
-String instructions1;
-String instructions2;
-int level;
-int startTime;
+boolean start, instructions, mouseClick, finish;
+String instructions1, instructions2;
+int level, startTime, score, row, col;
 
 PImage logo;
 void settings() {
@@ -22,15 +18,20 @@ void settings() {
 
 void setup() {
   colorMode(HSB, 255);
-  startTime = 3600; //60 frames per second * 60 seconds is 3600
+  startTime = 3660; //60 frames per second * 60 seconds is 3600
+  score = 0; //Set the score to 0 at first
+  row = 2; //Start at 2 columns
+  col = 2; //Start at 2 rows
   start = false;
   mouseClick = false;
   instructions = true;
+  finish = false;
   instructions1 = "You have 60 seconds to click on the different colored square. Each correct answer yields 10 points and there are no penalties for incorrect answers.";
   instructions2 = "Each level becomes more difficult as you progress. When you're ready, press the start button to begin!";
   strokeWeight(0);
   logo = loadImage("colorspotLogo.png");
 }
+
 void debug() {
   fill(255);
   textSize(12);
@@ -71,9 +72,22 @@ void draw() {
     fill(200, 50, 255);
     textSize(89);
     text("START", width/2, height/1.16);
-    if (mouseClick) {
+    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 820 && mouseY < 985) {
       start = true;
-      mouseClick = false;
+      instructions = false;
     }
+  }
+  //If the user has clicked the start button, start the game and timer!
+  if (start) {
+    background(30);
+    debug();
+    int timer = (startTime-frameCount)/60;
+    if (timer == 0) {
+      timer = 0;
+      start = false;
+      finish = true;
+    }
+    textSize(width/18);
+    text(timer, width/2, width/18);
   }
 }
