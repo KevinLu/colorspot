@@ -10,6 +10,8 @@ boolean start, instructions, mouseClick, finish;
 String instructions1, instructions2;
 int level, startTime, score, row, col;
 
+float[][] grid;
+
 PImage logo;
 void settings() {
   fullScreen(); //the game starts in fullscreen mode
@@ -20,8 +22,14 @@ void setup() {
   colorMode(HSB, 255);
   startTime = 3660; //60 frames per second * 60 seconds is 3600
   score = 0; //Set the score to 0 at first
-  row = 2; //Start at 2 columns
-  col = 2; //Start at 2 rows
+  row = 10; //Start at 2 columns
+  col = 10; //Start at 2 rows
+  grid = new float[row][col];
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      grid[i][j] = random(0, 255);
+    }
+  }
   start = false;
   mouseClick = false;
   instructions = true;
@@ -72,22 +80,38 @@ void draw() {
     fill(200, 50, 255);
     textSize(89);
     text("START", width/2, height/1.16);
-    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 820 && mouseY < 985) {
+    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 920 && mouseY < 1084) {
       start = true;
       instructions = false;
+      frameCount = 0;
     }
   }
   //If the user has clicked the start button, start the game and timer!
-  if (start) {
+  if (start && !instructions) {
     background(30);
-    debug();
     int timer = (startTime-frameCount)/60;
     if (timer == 0) {
       timer = 0;
       start = false;
       finish = true;
     }
+    strokeWeight(5);
+    if (score == 0) {
+      rectMode(CORNER);
+      for (int i = 0; i < row-8; i++) {
+        for (int j = 0; j < col-8; j++) {
+          stroke(150, 250, 255);
+          fill(150, 200, 255);
+          rect(i*(width/4), j*(width/4), width/4, width/4, 25);
+        }
+      }
+      fill(150, 220, 255);
+      rect(0, 0, width/4, width/4, 25);
+    }
     textSize(width/18);
-    text(timer, width/2, width/18);
+    fill(255);
+    text(timer, width/1.25, width/18);
+    text("Score: " + score*10, width/1.25, width/10);
+    debug();
   }
 }
