@@ -8,6 +8,7 @@ Program name: Color Spot
 //VARIABLES
 boolean start;
 boolean instructions;
+boolean mouseClick;
 String instructions1;
 String instructions2;
 int level;
@@ -23,6 +24,7 @@ void setup() {
   colorMode(HSB, 255);
   startTime = 3600; //60 frames per second * 60 seconds is 3600
   start = false;
+  mouseClick = false;
   instructions = true;
   instructions1 = "You have 60 seconds to click on the different colored square. Each correct answer yields 10 points and there are no penalties for incorrect answers.";
   instructions2 = "Each level becomes more difficult as you progress. When you're ready, press the start button to begin!";
@@ -33,6 +35,9 @@ void debug() {
   fill(255);
   textSize(12);
   text("X: "+mouseX+"Y: "+mouseY, 38, 12);
+}
+void mousePressed() {
+  mouseClick = true;
 }
 //int timer = (startTime-frameCount)/60;
 void draw() {
@@ -57,8 +62,18 @@ void draw() {
     text(instructions2, width/2, height/1.4, width/2, height/2);
     //Start button
     fill(198, 100, 200);
-    rect(width/2 + 5, height/1.2 + 5, width/5, width/12, width/5);
+    rect(width/2 + 5, height/1.2 + 5, width/5, width/12);
     fill(198, 120, 254);
-    rect(width/2, height/1.2, width/5, width/12, width/5);
+    rect(width/2, height/1.2, width/5, width/12);
+    fill(198, 100, 150);
+    textSize(92);
+    text("START", width/2, height/1.16);
+    fill(200, 50, 255);
+    textSize(89);
+    text("START", width/2, height/1.16);
+    if (mouseClick) {
+      start = true;
+      mouseClick = false;
+    }
   }
 }
