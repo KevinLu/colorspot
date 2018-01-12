@@ -20,13 +20,15 @@ void settings () {
 void mainGame () {
   colorMode(HSB, 255);
   fill(c, 200, 200);
+  stroke(c, 255, 150);
+  strokeWeight(5);
   for (int r = 0; r < row.length; r++) {
     for (int c = 0; c < col.length; c++) {
-      rect(row[r], col[c], 100, 100, 10);
+      rect(row[r], col[c], 100, 100, 20);
     }
   }
   fill(c, 150, 200);
-  rect(row[dRow], col[dCol], 100, 100, 10);
+  rect(row[dRow], col[dCol], 100, 100, 20);
 }
 
 void refresh () {
@@ -35,6 +37,7 @@ void refresh () {
   c = (int)random(0, 255);
 }
 void draw () {
+  background(c, 255, 100);
   mainGame();
   if (mousePressed && mouseX > row[dRow] && mouseX < row[dRow] + 100 && mouseY > col[dCol] && mouseY < col[dCol] + 100) { 
     refresh();
