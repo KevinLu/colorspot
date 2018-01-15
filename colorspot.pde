@@ -6,15 +6,15 @@ Program name: Color Spot
  */
 
 //VARIABLES
-boolean start, instructions, finish;
+boolean start, instructions, finish, mouseClick;
 String instructions1, instructions2;
 int level, startTime, score, dRow, dCol, c;
 
 int[] row;
 int[] col;
 
-int[] saturation = {100, 105, 110, 115, 120, 130, 140, 150, 160, 170, 180, 190, 195, 196, 197, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198};
-int[] brightness= {110, 120, 130, 140, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 196, 197, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198};
+int[] saturation = {100, 105, 110, 115, 120, 130, 140, 150, 160, 170, 180, 190, 191, 192, 193, 194, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195};
+int[] brightness= {110, 120, 130, 140, 150, 155, 160, 165, 170, 175, 180, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195};
 
 HashMap <Integer, String> ranks = new HashMap <Integer, String>();
 
@@ -39,6 +39,7 @@ void setup() {
   dCol = (int)random(0, col.length); //randomize the col value of the different square
   c = (int)random(0, 255); //randomize the color value of the different square
 
+  mouseClick = false;
   start = false;
   instructions = true;
   finish = false;
@@ -51,8 +52,16 @@ void setup() {
 
 void debug() {
   fill(255);
-  textSize(12);
-  text("X: "+mouseX+"Y: "+mouseY, 38, 12);
+  textSize(32);
+  text("X: "+mouseX+"Y: "+mouseY, 120, 32);
+}
+
+void mouseClicked () {
+  if (mouseX > row[dRow] && mouseX < row[dRow] + 100 && mouseY > col[dCol] && mouseY < col[dCol] + 100) {
+    mouseClick = true;
+  } else {
+    mouseClick = false;
+  }
 }
 
 void mainGame () {
@@ -92,6 +101,8 @@ void draw() {
     //Instructions
     textSize(32);
     textAlign(CENTER);
+    fill(250);
+    text("By: Kevin Lu", width/2, height/5);
     fill(30);
     text(instructions1, width/2, height/1.9, width/2, height/2);
     textSize(35);
@@ -127,7 +138,8 @@ void draw() {
     }
     rectMode(CORNER);
     mainGame();
-    if (mousePressed && mouseX > row[dRow] && mouseX < row[dRow] + 100 && mouseY > col[dCol] && mouseY < col[dCol] + 100) {
+    if (mouseClick) {
+      mouseClick = false;
       score += 10;
       refresh();
     }
