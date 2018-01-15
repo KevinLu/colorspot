@@ -13,8 +13,12 @@ int level, startTime, score, dRow, dCol, c;
 int[] row;
 int[] col;
 
+int[] saturation = {100, 105, 110, 115, 120, 130, 140, 150, 160, 170, 180, 190, 195, 196, 197, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198};
+int[] brightness= {110, 120, 130, 140, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 196, 197, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198};
+
 HashMap <Integer, String> ranks = new HashMap <Integer, String>();
 
+PImage pin;
 PImage logo;
 void settings() {
   fullScreen(); //the game starts in fullscreen mode
@@ -23,23 +27,10 @@ void settings() {
 void setup() {
   row = new int[(int)Math.floor(displayHeight/100)]; //Automatically calculates the optimal grid size for screens.
   col = new int[(int)Math.floor(displayHeight/100)];
+  ratings();
   colorMode(HSB, 255);
-  startTime = 420; //60 frames per second * 60 seconds is 3600
+  startTime = 3600; //60 frames per second * 60 seconds is 3600
   score = 0; //Set the score to 0 at first
-  //Adding "ranks" based on final score
-  ranks.put(0, "AFK");
-  ranks.put(1, "One Hit Wonder");
-  ranks.put(2, "What are colors?");
-  ranks.put(3, "My eyes hurt");
-  ranks.put(4, "Below Average");
-  ranks.put(5, "Average");
-  ranks.put(6, "Above Average");
-  ranks.put(7, "Super Eyesight");
-  ranks.put(8, "Inhuman Reactions");
-  ranks.put(9, "Better than developer");
-  ranks.put(10, "Discrepancy Detected...");
-  ranks.put(11, "You're too good!");
-  ranks.put(12, "Cheating?");
   for (int i = 0; i < Math.floor(displayHeight/100); i++) { //fill the arrays with values of i * 100, since 100 is the width of each square
     row[i] = i*100;
     col[i] = i*100;
@@ -51,10 +42,11 @@ void setup() {
   start = false;
   instructions = true;
   finish = false;
-  instructions1 = "You have 60 seconds to click on the different colored square. Each correct answer yields 10 points and there are no penalties for incorrect answers. Clicking only on correct squares increase your multiplier.";
+  instructions1 = "You have 60 seconds to click on the different colored square. Each correct answer yields 10 points and there are no penalties for incorrect answers.";
   instructions2 = "Each level becomes more difficult as you progress. When you're ready, press the start button to begin!";
   strokeWeight(0);
   logo = loadImage("colorspotLogo.png");
+  pin = loadImage("pushpin.png");
 }
 
 void debug() {
@@ -73,6 +65,8 @@ void mainGame () {
       rect(row[r], col[c], 100, 100, 20);
     }
   }
+  fill(c, saturation[constrain(score, score, 200)/10], brightness[constrain(score, score, 200)/10]);
+  rect(row[dRow], col[dCol], 100, 100, 20);
 }
 
 void refresh () {
@@ -102,6 +96,8 @@ void draw() {
     text(instructions1, width/2, height/1.9, width/2, height/2);
     textSize(35);
     text(instructions2, width/2, height/1.4, width/2, height/2);
+    pin.resize(0, 45);
+    image(pin, width/2, height/4.1);
     //Start button
     fill(198, 100, 200);
     rect(width/2 + 5, height/1.2 + 5, width/5, width/12);
@@ -113,6 +109,7 @@ void draw() {
     fill(200, 50, 255);
     textSize(89);
     text("START", width/2, height/1.16);
+    image(pin, width/2.5, height/1.325);
     if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 920 && mouseY < 1084) {
       start = true;
       instructions = false;
@@ -130,50 +127,6 @@ void draw() {
     }
     rectMode(CORNER);
     mainGame();
-    if (score == 0) {
-      fill(c, 100, 150);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 10) {
-      fill(c, 110, 160);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 20) {
-      fill(c, 150, 170);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 30) {
-      fill(c, 160, 180);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 40) {
-      fill(c, 170, 185);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 50) {
-      fill(c, 180, 188);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 60) {
-      fill(c, 185, 190);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 70) {
-      fill(c, 188, 193);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 80) {
-      fill(c, 189, 195);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score == 90) {
-      fill(c, 192, 198);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
-    if (score >= 100) {
-      fill(c, 196, 199);
-      rect(row[dRow], col[dCol], 100, 100, 20);
-    }
     if (mousePressed && mouseX > row[dRow] && mouseX < row[dRow] + 100 && mouseY > col[dCol] && mouseY < col[dCol] + 100) {
       score += 10;
       refresh();
@@ -186,6 +139,7 @@ void draw() {
   }
   if (finish) { //when the timer hits 0, display this screen.
     background(30);
+    strokeWeight(0);
     fill(250);
     textSize(150);
     text("Time is up!", width/2, height/3);
@@ -193,16 +147,20 @@ void draw() {
     fill(5, 255, 200);
     text("Final score: "+score, width/2, height/2);
     fill(50, 255, 200);
-    text("Rank: "+ranks.get(score/10), width/2, height/1.5);
+    text("Rating: "+ranks.get(score/10), width/2, height/1.5);
     //Exit button
-    fill(198, 100, 200);
+    rectMode(CENTER);
+    fill(150, 100, 200);
     rect(width/2 + 5, height/1.2 + 5, width/5, width/12);
-    fill(198, 120, 254);
+    fill(148, 120, 254);
     rect(width/2, height/1.2, width/5, width/12);
-    fill(198, 100, 150);
+    fill(148, 100, 150);
     textSize(92);
     text("EXIT", width/2, height/1.16);
-    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 920 && mouseY < 1084) {
+    fill(150, 50, 255);
+    textSize(89);
+    text("EXIT", width/2, height/1.16);
+    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 920 && mouseY < 1084) { //Checking if EXIT is pressed
       exit();
     }
   }
