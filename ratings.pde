@@ -26,6 +26,8 @@ void ratings () {
   ranks.put(20, "Highscore?");
   ranks.put(21, "Super eyesight!");
   ranks.put(22, "Can u show me de wae?");
+  ranks.put(23, "Legend");
+  ranks.put(24, "u know de wae");
   /*
   "Animals" ratings
    */
