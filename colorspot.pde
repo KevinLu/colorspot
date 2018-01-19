@@ -6,7 +6,7 @@ Program name: Color Spot
  */
 
 //VARIABLES
-boolean start, instructions, finish, mouseClick, enterScore;
+boolean start, instructions, finish, mouseClick, enterScore, topScore;
 String instructions1, instructions2;
 int level, startTime, score, dRow, dCol, c, nameAmount;
 float transparency;
@@ -21,15 +21,24 @@ HashMap <Integer, String> ranks = new HashMap <Integer, String>();
 
 PImage pin;
 PImage logo;
+//File scoreFile = new File("/data/scores.csv");
 void settings() {
-  fullScreen(); //the game starts in fullscreen mode
+  //fullScreen(); //the game starts in fullscreen mode
+  size(1920, 1200);
 }
-
 void setup() {
   frameRate(30);
-  //Creating the highscore table
+  //Loading the highscore table
   highScores = loadTable("data/scores.csv", "header");
-  highScores.addRow();
+  //boolean exists = scoreFile.exists(); //Checking if the scores.csv file exists
+  //if (exists) {
+  //  highScores = loadTable("data/scores.csv", "header");
+  //} else if (!exists) {
+  //  highScores = new Table();
+  //  highScores.addColumn("name");
+  //  highScores.addColumn("score");
+  //  saveTable(highScores, "data/scores.csv");
+  //}
   nameAmount = highScores.getRowCount();
 
   row = new int[(int)Math.floor(displayHeight/100)]; //Automatically calculates the optimal grid size for screens.
@@ -51,11 +60,13 @@ void setup() {
   start = false;
   instructions = true;
   finish = false;
+  topScore = false;
   instructions1 = "You have 60 seconds to click on the different colored square. Each correct answer yields 10 points and there are no penalties for incorrect answers.";
   instructions2 = "Each level becomes more difficult as you progress. When you're ready, press the start button to begin!";
   strokeWeight(0);
   logo = loadImage("colorspotLogo.png");
   pin = loadImage("pushpin.png");
+  highScores.sortReverse("score");
 }
 
 void debug() {
@@ -119,20 +130,37 @@ void draw() {
     image(pin, width/2, height/4.1);
     //Start button
     fill(198, 100, 200);
-    rect(width/2 + 5, height/1.2 + 5, width/5, width/12);
+    rect(width/3 + 5, height/1.2 + 5, width/5, width/12);
     fill(198, 120, 254);
-    rect(width/2, height/1.2, width/5, width/12);
+    rect(width/3, height/1.2, width/5, width/12);
     fill(198, 100, 150);
     textSize(92);
-    text("START", width/2, height/1.16);
+    text("START", width/3, height/1.16);
     fill(200, 50, 255);
     textSize(89);
-    text("START", width/2, height/1.16);
-    image(pin, width/2.5, height/1.325);
-    if (mousePressed && mouseX > 768 && mouseX < 1155 && mouseY > 920 && mouseY < 1084) {
+    text("START", width/3, height/1.16);
+    image(pin, width/3.5, height/1.325);
+    //Check highscores button
+    fill(99, 100, 200);
+    rect(width/1.5 + 5, height/1.2 + 5, width/3, width/12);
+    fill(99, 120, 254);
+    rect(width/1.5, height/1.2, width/3, width/12);
+    fill(99, 100, 150);
+    textSize(92);
+    text("HIGHSCORES", width/1.5, height/1.16);
+    fill(101, 50, 255);
+    textSize(90);
+    text("HIGHSCORES", width/1.5, height/1.16);
+    image(pin, width/1.5, height/1.325);
+    if (mousePressed && mouseX > 448 && mouseX < 835 && mouseY > 920 && mouseY < 1084) {
       start = true;
       instructions = false;
       frameCount = 0;
+    }
+    if (mousePressed && mouseX > 960 && mouseX < 1604 && mouseY > 920 && mouseY < 1084) {
+      instructions = false;
+      topScore = true;
+      enterScore = false;
     }
   }
   //If the user has clicked the start button, start the game and timer!
@@ -194,7 +222,8 @@ void draw() {
     rect(width/1.5, height/1.2, width/5, width/12);
     textSize(60);
     fill(178, 100, 150);
-    text("SAVE SCORE", width/1.5 + 3, height/1.16 + 3);
+    text("SAVE SCORE", width/1.5, height/1.16);
+    textSize(59);
     fill(180, 50, 255);
     text("SAVE SCORE", width/1.5, height/1.16);
     if (mousePressed && mouseX > 447 && mouseX < 836 && mouseY > 920 && mouseY < 1084) { //Checking if EXIT is pressed
@@ -203,10 +232,14 @@ void draw() {
     if (mousePressed && mouseX > 1088 && mouseX < 1475 && mouseY > 920 && mouseY < 1084) { //Checking if Save Score is pressed
       finish = false;
       enterScore = true;
+      topScore = false;
     }
   }
   if (enterScore) {
     highscoreBox();
+  }
+  if (topScore) {
+    leaderboard();
   }
   debug();
 }
