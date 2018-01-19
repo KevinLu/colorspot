@@ -8,7 +8,7 @@ Program name: Color Spot
 //VARIABLES
 boolean start, instructions, finish, mouseClick, enterScore;
 String instructions1, instructions2;
-int level, startTime, score, dRow, dCol, c;
+int level, startTime, score, dRow, dCol, c, nameAmount;
 float transparency;
 
 int[] row;
@@ -27,12 +27,17 @@ void settings() {
 
 void setup() {
   frameRate(30);
+  //Creating the highscore table
+  highScores = loadTable("data/scores.csv", "header");
+  highScores.addRow();
+  nameAmount = highScores.getRowCount();
+
   row = new int[(int)Math.floor(displayHeight/100)]; //Automatically calculates the optimal grid size for screens.
   col = new int[(int)Math.floor(displayHeight/100)];
   transparency = 0;
   ratings();
   colorMode(HSB, 255);
-  startTime = 1800; //30 frames per second * 60 seconds is 1800
+  startTime = 60; //30 frames per second * 60 seconds is 1800
   score = 0; //Set the score to 0 at first
   for (int i = 0; i < Math.floor(displayHeight/100); i++) { //fill the arrays with values of i * 100, since 100 is the width of each square
     row[i] = i*100;
@@ -196,8 +201,8 @@ void draw() {
       exit();
     }
     if (mousePressed && mouseX > 1088 && mouseX < 1475 && mouseY > 920 && mouseY < 1084) { //Checking if Save Score is pressed
-    finish = false;
-    enterScore = true;
+      finish = false;
+      enterScore = true;
     }
   }
   if (enterScore) {
