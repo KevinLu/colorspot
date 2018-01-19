@@ -13,16 +13,10 @@ void keyPressed() {
   }
 }
 
-void highscore (int score) {
-
-  highScores = new Table();
-
-  highScores.addColumn("name");
-  highScores.addColumn("score");
-
-  TableRow newRow = highScores.addRow();
-  newRow.setString("name", name);
-  newRow.setInt("score", score);
+void highscore () {
+  TableRow rowAmount = highScores.addRow();
+  rowAmount.setString("name", name);
+  rowAmount.setInt("score", score);
 }
 
 void highscoreBox () {
@@ -43,8 +37,12 @@ void highscoreBox () {
   //Save button
   rectMode(CENTER);
   rect(width/2, height/1.5, width/8, height/8);
+  fill(250);
+  text("Save", width/2, height/1.45);
   if (mousePressed && mouseX > 840 && mouseX < 1080 && mouseY > 725 && mouseY < 875) {
-    saveTable(highScores, "data/new.csv");
+    highscore();
+    highScores.trim();
+    saveTable(highScores, "data/scores.csv");
     finish = true;
     enterScore = false;
   }
