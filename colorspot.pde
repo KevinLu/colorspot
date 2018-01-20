@@ -66,7 +66,6 @@ void setup() {
   strokeWeight(0);
   logo = loadImage("colorspotLogo.png");
   pin = loadImage("pushpin.png");
-  highScores.sortReverse("score");
 }
 
 void debug() {
@@ -107,8 +106,13 @@ void refresh () {
 void draw() {
   //Since the instructions is set to true in setup, we display it here
   if (instructions) {
-    background(30);
-    debug();
+    loop();
+    for (int i = 0; i < 5; i++) { //Updating the "transparency" value for the fading effect
+      transparency += 1;
+    }
+    fill(20, transparency);
+    rectMode(CORNER);
+    rect(0, 0, width, height);
     //"Color Spot" Title Text
     image(logo, 0, 0);
     //Instructions Background Shapes
@@ -130,34 +134,35 @@ void draw() {
     image(pin, width/2, height/4.1);
     //Start button
     fill(198, 100, 200);
-    rect(width/3 + 5, height/1.2 + 5, width/5, width/12);
+    rect(width/3.5 + 5, height/1.2 + 5, width/5, width/12);
     fill(198, 120, 254);
-    rect(width/3, height/1.2, width/5, width/12);
+    rect(width/3.5, height/1.2, width/5, width/12);
     fill(198, 100, 150);
     textSize(92);
-    text("START", width/3, height/1.16);
+    text("START", width/3.5, height/1.16);
     fill(200, 50, 255);
     textSize(89);
-    text("START", width/3, height/1.16);
+    text("START", width/3.5, height/1.16);
     image(pin, width/3.5, height/1.325);
     //Check highscores button
     fill(99, 100, 200);
-    rect(width/1.5 + 5, height/1.2 + 5, width/3, width/12);
+    rect(width/1.3 + 5, height/1.2 + 5, width/3, width/12);
     fill(99, 120, 254);
-    rect(width/1.5, height/1.2, width/3, width/12);
+    rect(width/1.3, height/1.2, width/3, width/12);
     fill(99, 100, 150);
     textSize(92);
-    text("HIGHSCORES", width/1.5, height/1.16);
+    text("HIGHSCORES", width/1.3, height/1.16);
     fill(101, 50, 255);
     textSize(90);
-    text("HIGHSCORES", width/1.5, height/1.16);
-    image(pin, width/1.5, height/1.325);
-    if (mousePressed && mouseX > 448 && mouseX < 835 && mouseY > 920 && mouseY < 1084) {
+    text("HIGHSCORES", width/1.3, height/1.16);
+    image(pin, width/1.3, height/1.325);
+    if (mousePressed && mouseX > 355 && mouseX < 745 && mouseY > 920 && mouseY < 1084) { //If START is pressed
       start = true;
       instructions = false;
       frameCount = 0;
     }
-    if (mousePressed && mouseX > 960 && mouseX < 1604 && mouseY > 920 && mouseY < 1084) {
+    if (mousePressed && mouseX > 1157 && mouseX < 1800 && mouseY > 920 && mouseY < 1084) { //If HIGHSCORES is pressed
+      highScores.sortReverse("score");
       instructions = false;
       topScore = true;
       enterScore = false;
@@ -233,6 +238,7 @@ void draw() {
       finish = false;
       enterScore = true;
       topScore = false;
+      highScores.sortReverse("score");
     }
   }
   if (enterScore) {
