@@ -38,10 +38,20 @@ void leaderboard () {
     text(row.getString("name"), width/3, height/5.9 + leaderboardDisplacement);
     text(row.getString("score"), width/1.5, height/5.9 + leaderboardDisplacement);
   }
-  fill(((mouseX*mouseY)/5000)%255, 255, 255);
+  rectMode(CENTER);
+  fill(((mouseX*mouseY)/5000)%255, 200, 150);
+  rect(width/2 + 5, height/1.2 + 5, width/5, height/12); //Return to main menu button
+  fill(((mouseX*mouseY)/5000)%255, 200, 200);
   rect(width/2, height/1.2, width/5, height/12); //Return to main menu button
-  fill(255);
-  text("BACK", width/2, height/1.2);
+  fill(((mouseX*mouseY)/5000)%255, 100, 100);
+  text("BACK", width/2, height/1.16);
+  textSize(69);
+  fill(((mouseX*mouseY)/5000)%255, 150, 150);
+  text("BACK", width/2, height/1.16);
+  if (mousePressed && mouseX > 768 && mouseX < 1156 && mouseY > 950 && mouseY < 1052) {
+    topScore = false;
+    instructions = true;
+  }
 }
 
 void highscoreBox () {
@@ -56,7 +66,7 @@ void highscoreBox () {
   textSize(72);
   text("Enter your name", width/2, height/3);
   //String name
-  fill((name.length()*10)%255, 200, 255);
+  fill((name.length()*10)%255, 200, 200);
   textSize(100);
   text(name, width/2, height/2);
   //Save button
@@ -72,5 +82,6 @@ void highscoreBox () {
     saveTable(highScores, "data/scores.csv");
     finish = true;
     enterScore = false;
+    highScores.sortReverse("score");
   }
 }
