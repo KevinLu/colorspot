@@ -7,7 +7,7 @@ Program name: Color Spot
 
 //VARIABLES
 boolean start, instructions, finish, mouseClick, enterScore, topScore;
-String instructions1, instructions2;
+String instructions1, instructions2, top1, top2, top3;
 int level, startTime, score, dRow, dCol, c, nameAmount;
 float transparency;
 
@@ -23,13 +23,19 @@ PImage pin;
 PImage logo;
 //File scoreFile = new File("/data/scores.csv");
 void settings() {
-  //fullScreen(); //the game starts in fullscreen mode
-  size(1920, 1200);
+  fullScreen(); //the game starts in fullscreen mode
 }
 void setup() {
   frameRate(30);
   //Loading the highscore table
   highScores = loadTable("data/scores.csv", "header");
+  highScores.sortReverse("score");
+  TableRow row1 = highScores.getRow(0);
+  top1 =  row1.getString("name");
+  TableRow row2 = highScores.getRow(1);
+  top2 =  row1.getString("name");
+  TableRow row3 = highScores.getRow(2);
+  top3 =  row1.getString("name");
   //boolean exists = scoreFile.exists(); //Checking if the scores.csv file exists
   //if (exists) {
   //  highScores = loadTable("data/scores.csv", "header");
@@ -207,7 +213,11 @@ void draw() {
     fill(5, 255, 200);
     text("Final score: "+score, width/2, height/2);
     fill(50, 255, 200);
+    if (score < 300) {
     text("Rating: "+ranks.get(score/10), width/2, height/1.5);
+    } else {
+      text("Rating: Best of the class?", width/2, height/1.5);
+    }
     //Exit button
     rectMode(CENTER);
     fill(150, 100, 200);
@@ -247,5 +257,4 @@ void draw() {
   if (topScore) {
     leaderboard();
   }
-  debug();
 }
