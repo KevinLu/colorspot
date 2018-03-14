@@ -17,6 +17,7 @@ A simple point & click game to test the user's ability to differentiate differen
 ## Getting Started
 
 Download the .pde files and run it on your own computer.
+Make sure to also download the .csv file for score saving ability.
 
 ## Prerequisites
 
